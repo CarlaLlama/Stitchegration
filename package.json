@@ -4,13 +4,28 @@
   "description": "Test Stitch API integration",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node index.js"
   },
   "author": "",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
+    "@peculiar/webcrypto": "^1.1.7",
+    "dotenv": "^10.0.0",
+    "fetch": "^1.1.0",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.1",
-    "koa-graphql": "^0.8.0",
-    "koa-mount": "^4.0.0"
+    "koa-bodyparser": "^4.3.0",
+    "koa-bodyparser-graphql": "^1.0.0",
+    "koa-force-ssl": "^0.0.5",
+    "koa-mount": "^4.0.0",
+    "koa-router": "^10.0.0",
+    "koa-session": "^6.2.0",
+    "node-fetch": "^2.6.1",
+    "subtle": "^0.1.8",
+    "uuid": "^8.3.2",
+    "webcrypto": "^0.1.1"
   }
 }
