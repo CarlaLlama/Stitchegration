@@ -17,3 +17,5 @@ Refer to the Stitch Developer Docs if you need them: https://stitch.money/docs/i
 -----------
 
 To use this project locally, pop your `certificate.pem` and `client.json` files in the `/keys` directory and run `npm i` then `npm run serve`!
+
+This project runs by default on localhost:5000, but can be configured to your preferences.

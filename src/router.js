@@ -1,7 +1,7 @@
 import Router from 'koa-router';
 const router = new Router();
 import { generateVerifierChallengePair, generateRandomStateOrNonce } from './utils/code-verifier.js';
-import { buildAuthorizationUrl, getConfidentialAccessToken } from './services/stitch-requests.js';
+import { buildAuthorizationUrl, getClientAccessToken } from './services/stitch-requests.js';
 import APIRequestService from './services/api-requests.js';
 
 let localVerifier = {};
@@ -12,7 +12,7 @@ let localAuth;
  */
 router.get('/token', async ctx => {
   try {
-    let results = await getConfidentialAccessToken();
+    let results = await getClientAccessToken();
 
     ctx.status = 200;
     ctx.body = {
@@ -33,7 +33,7 @@ router.get('/token', async ctx => {
  */
 router.get('/payment', async ctx => {
   try {
-    let results = await getConfidentialAccessToken();
+    let results = await getClientAccessToken();
     localAuth = new APIRequestService(results['access_token'], results['refresh_token']);
 
     let response = await localAuth.requestPayment(ctx.query.amount, ctx.query.currency);
@@ -64,7 +64,7 @@ router.get('/payment', async ctx => {
  */
 router.get('/payment-status', async ctx => {
   try {
-    let results = await getConfidentialAccessToken();
+    let results = await getClientAccessToken();
     localAuth = new APIRequestService(results['access_token'], results['refresh_token']);
     let response = await localAuth.getPaymentStatus(ctx.query.id);
     ctx.body = response;
@@ -115,7 +115,7 @@ router.get('/account-ids', async ctx => {
  * User-constrained Endpoints
  * Query params: amount, currency
  * Requires user token to be retrieved from query body
- * Eg: /payment?amount=1&currency=ZAR
+ * Eg: /user-payment?amount=1&currency=ZAR
  */
 router.get('/user-payment', async ctx => {
   try {
@@ -137,6 +137,25 @@ router.get('/user-payment', async ctx => {
       }      
     }
 
+  } catch (e) {
+    ctx.status = e.status || 500;
+    ctx.body = `Could not request token. ${e.message}`;
+  }
+});
+
+/**
+ * Root route
+ */
+router.get('/', async ctx => {
+  try {
+    ctx.status = 200;
+    ctx.body = 'Welcome to Stitchegration!\n' +
+      'Endpoints available to you:\n' +
+      '/token : get a client access token\n' +
+      '/payment?amount=1&currency=ZAR : make a client payment request\n' +
+      '/payment-status?id=PAYMENT_REQUEST_ID : check status of a payment request\n' +
+      '/account : retrieve user account data\n' +
+      '/user-payment?amount=1&currency=ZAR : make a user payment request\n';
   } catch (e) {
     ctx.status = e.status || 500;
     ctx.body = `Could not request token. ${e.message}`;

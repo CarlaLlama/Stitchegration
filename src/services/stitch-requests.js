@@ -20,7 +20,7 @@ export function buildAuthorizationUrl(challenge, state, nonce) {
   return `https://secure.stitch.money/connect/authorize?${searchString}`;
 }
 
-export async function getConfidentialAccessToken() {
+export async function getClientAccessToken() {
   let token = await generateJWT(clientDetails.id);
 
   const body = {
